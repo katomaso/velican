@@ -6,7 +6,6 @@ import subprocess
 import logging
 import pyinotify
 import datetime as dt
-import argparse
 
 from pathlib import Path
 
@@ -63,10 +62,10 @@ def main(app_folder: Path):
     if not trigger.exists():
         trigger.touch()
 
-    regen = Regen(config=str(config), trigger=str(trigger))
+    regen = Regen(config=config, trigger=trigger)
 
     wm = pyinotify.WatchManager()
-    notifier = AsyncNotifier(wm, read_freq=2)
+    notifier = pyinotify.AsyncNotifier(wm, default_proc_fun=regen, read_freq=2)
     wm.add_watch(
         str(app_folder / ".publish"),
         pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MODIFY)
@@ -82,12 +81,10 @@ def main(app_folder: Path):
             break 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Watch .publish file to trigger site regeneration')
-    parser.add_argument('FOLDER', metavar='folder', type=str,
-                        help='site root folder')
-    parser.add_argument('--debug', dest='debug', action='store_const',
-                        default=False)
-
-    args = parser.parse_args()
-    logging.basicConfig(level=logging.DEBUG if args.debug else logging.INFO)
-    sys.exit(main(Path(args.folder)) or 0)
+    print(sys.argv)
+    if "--debug" in sys.argv:
+        debug = True
+        sys.argv.remove("--debug")
+    folder = sys.argv[1]
+    logging.basicConfig(level=logging.DEBUG if debug else logging.INFO)
+    sys.exit(main(Path(folder)) or 0)
