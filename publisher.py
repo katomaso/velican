@@ -58,7 +58,7 @@ def main(app_folder: Path):
         logger.error(f"{config} does not exist")
         return 1
 
-    trigger = app_folder / ".publish"
+    trigger = app_folder / "content" / ".publish"
     if not trigger.exists():
         trigger.touch()
 
@@ -67,7 +67,7 @@ def main(app_folder: Path):
     wm = pyinotify.WatchManager()
     notifier = pyinotify.AsyncNotifier(wm, default_proc_fun=regen, read_freq=2)
     wm.add_watch(
-        str(app_folder / ".publish"),
+        str(trigger),
         pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MODIFY)
 
     while True:
