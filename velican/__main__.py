@@ -10,7 +10,7 @@ COMMANDS with options:
 	add-blog <url> <username> <password>
 	add-domain <domain>
 	add-path <domain> <path>
-	add-webdav <url> <username> <password>
+	add-webdav <domain> <path> <username> <password>
 
 Velican command must be run as root. It modifies nginx's conf.d
 and writes to /etc/ssl and creates folders under /var/www/. It
@@ -35,8 +35,8 @@ def main() -> int:
 		domain, path = check_args(args, 2)
 		acme.add_domain(domain)
 	if cmd == "add-webdav":
-		url, username, password = check_args(args, 3)
-		acme.add_domain(domain)
+		domain, path, username, password = check_args(args, 4)
+		acme.add_webdav(domain, path, username, password)
 	return 0
 
 def check_args(args: list[str], n: int) -> tuple[str]:

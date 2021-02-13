@@ -39,25 +39,18 @@ def add_domain(domain: str):
 		subprocess.run(["openssl", 'req', '-new', '-sha256', '-key', key, '-subj', f'"/CN={domain}"'], stdout=csr_file, check=True, capture_output=True)
 
 	domain_folder = f"/etc/nginx/conf.d/{domain}"
-	domain_conf = f"/etc/nginx/conf.d/{domain}.conf"
-	domain_conf_content = jinja2.Template(pkg_resources.resource_string("velican", "conf/nginx.conf")).render(
-		{"DOMAIN_CRT": crt, "DOMAIN_KEY": key, "DOMAIN": domain})
-	with open(domain_conf, "wt") as domain_conf_file:
-		domain_conf_file.write(domain_conf_content)
 	os.mkdir(domain_folder)
+	utils.render_resource("conf/nginx.conf", f"/etc/nginx/conf.d/{domain}.conf", {
+		"DOMAIN_CRT": crt, "DOMAIN_KEY": key, "DOMAIN": domain})
 
 	# add domain renewal timer and start it right away
-	systemd_timer = f"/etc/systemd/system/renew-domain@{domain}.timer"
+	systemd_timer = 
 	if not os.exists(SYSTEMD_TEMPLATE):
 		# install the template for certificate renewals
-		systemd_template_content = jinja2.Template(pkg_resources.resource_string("velican", "conf/systemd.template")).render(
-			{"binary": shutil.which("renew-domain")}) # installed as entry-point
-		with open(SYSTEMD_TEMPLATE, "wt") as systemd_template_file:
-			systemd_template_file.write(systemd_template_content)
+		utils.render_resource("conf/systemd.template", SYSTEMD_TEMPLATE, {
+			"binary": shutil.which("renew-domain")}) # installed as entry-point
 
-	systemd_timer_content = jinja2.Template(pkg_resources.resource_string("velican", "conf/systemd.timer")).render()
-	with open(systemd_timer, "wt") as systemd_timer_file:
-		systemd_timer_file.write(systemd_timer_content)
+	utils.render_resource("conf/systemd.timer", f"/etc/systemd/system/renew-domain@{domain}.timer", {})
 
 	subprocess.run(["systemctl", "enable", f"renew-domain@{domain}.timer"], check=True, capture_output=True)
 	subprocess.run(["systemctl", "start", f"renew-domain@{domain}.timer"], check=True, capture_output=True)

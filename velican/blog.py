@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
-import acme_tiny
 import subprocess
-import jinja2
 import shutil
-import pkg_resources
 from datetime import date
+
+from . import utils
 
 SYSTEMD_TEMPLATE = "/etc/systemd/system/renew-domain@.service"
 
-def add_blog(url: str):
+def add_blog(url: str, username: str, password: str):
 	print(local)
 	return
 	domain = url
@@ -24,18 +23,16 @@ def add_blog(url: str):
 	if not exist_path(domain, path):
 		add_path(domain, path)
 
-	# if not exist_webdav(domain, path):
-	# 	add_webdav(domain, path, user, password)
+	if not exist_webdav(domain, path):
+		add_webdav(domain, path, username, password)
 
 def add_path(domain: str, path: str):
 	"""Add nginx "location" configuration into domain's conf.d folder"""
 	path_safe_name = path[1:].replace('/', '-') if path != "/" else "default"
-	nginx_path = f"/etc/nginx/conf.d/{domain}/{path_safe_name}.conf"
-	nginx_path_content = jinja2.Template(pkg_resources.resource_string("velican", "conf/nginx.path")).render(
-		{"path": path, "path_safe_name": path_safe_name, "domain": domain})
-	with open(SYSTEMD_TEMPLATE, "wt") as nginx_path_file:
-		nginx_path_file.write(nginx_path_content)
-
+	utils.rener_resource("conf/nginx.path", f"/etc/nginx/conf.d/{domain}/{path_safe_name}.conf", {
+		"path": path, "path_safe_name": path_safe_name, "domain": domain
+		}
+	)
 	# create web roots
 	os.makedirs(f"/var/www/{domain}{path}") # throws if folder already exists
 	shutil.chown(f"/var/www/{domain}{path}", "www-data")
@@ -43,6 +40,18 @@ def add_path(domain: str, path: str):
 	subprocess.run(["nginx", "-t"], check=True)
 	subprocess.run(["systemctl", "reload", "nginx"], check=True)
 
-# def add_webdav(domain: str, path: str, user: str, password: str):
-# 	os.makedirs(f"/var/webdav/{domain}{path}") # throws if folder already exists
-# 	shutil.chown(f"/var/webdav/{domain}{path}", "www-data")
+def add_webdav(domain: str, path: str, username: str, password: str):
+	"""Add nginx "location" configuration into domain's conf.d folder"""
+	path_safe_name = (path[1:].replace('/', '-') if path != "/" else "default") + "-webdav"
+	authfile = f"/var/webdav/.{{domain}}-{{path_safe_name}}.htpasswd"
+
+	pwfile = htpasswd.HtpasswdFile(authfile, create=htpasswd.options.create)
+	pwdfile.update(username, password)
+	pwfile.save()
+
+	os.makedirs(f"/var/webdav/{domain}{path}") # throws if folder already exists
+	shutil.chown(f"/var/webdav/{domain}{path}", "www-data")
+
+	utils.rener_resource("conf/nginx.webdav", f"/etc/nginx/conf.d/{domain}/{path_safe_name}.conf", {
+		"path": path, "path_safe_name": path_safe_name, "domain": domain, "authfile": authfile}
+	)
