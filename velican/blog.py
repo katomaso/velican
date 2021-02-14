@@ -4,21 +4,20 @@ import subprocess
 import shutil
 from datetime import date
 
+from . import acme
 from . import utils
 
 SYSTEMD_TEMPLATE = "/etc/systemd/system/renew-domain@.service"
 
 def add_blog(url: str, username: str, password: str):
-	print(local)
-	return
 	domain = url
 	path = ""
 	if "/" in url:
 		domain, path = domain.split("/", 1)
 	path = "/" + path
 
-	if not exist_domain(domain):
-		add_domain(domain)
+	if not acme.exist_domain(domain):
+		acme.add_domain(domain)
 
 	if not exist_path(domain, path):
 		add_path(domain, path)

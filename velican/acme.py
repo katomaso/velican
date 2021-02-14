@@ -5,7 +5,7 @@ import shutil
 import pkg_resources
 from datetime import date
 
-ACME_URL = acme_tiny.DEFAULT_DIRECTORY_URL  # https://acme-staging-v02.api.letsencrypt.org/directory
+ACME_URL = acme_tiny.DEFAULT_DIRECTORY_URL
 ACME_KEY = "/etc/ssl/acme/account.key"
 ACME_CHALLENGE = "/var/www/.well-known/acme-challenge"
 
@@ -44,11 +44,10 @@ def add_domain(domain: str):
 		"DOMAIN_CRT": crt, "DOMAIN_KEY": key, "DOMAIN": domain})
 
 	# add domain renewal timer and start it right away
-	systemd_timer = 
 	if not os.exists(SYSTEMD_TEMPLATE):
 		# install the template for certificate renewals
 		utils.render_resource("conf/systemd.template", SYSTEMD_TEMPLATE, {
-			"binary": shutil.which("renew-domain")}) # installed as entry-point
+			"binary": shutil.which("velican")}) # installed as entry-point
 
 	utils.render_resource("conf/systemd.timer", f"/etc/systemd/system/renew-domain@{domain}.timer", {})
 

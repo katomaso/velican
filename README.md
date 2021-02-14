@@ -21,4 +21,12 @@ so you can edit your posts comfortably online - still without any backend.
 Security is the main advantage of statically generated sites. If you use HTTPS then your only security 
 concert is securing your WebDAV endpoint. Because of encrypted traffic, you can use basic authorization
 provided by your favorite webserver. Accounts can be stored in httpasswd file or some webservers even
-support integration with LDAP. 
+support integration with LDAP.
+
+# Installation
+
+```
+pip install velican
+```
+
+Will give you 
