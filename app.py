@@ -6,7 +6,7 @@ from pathlib import Path
 # output_root contains logs resp. locks with suffixes .log resp. .lock.
 # lock contains timestamp of the start of the operation and has a timeout
 OUTPUT_ROOT = Path("/var/velican/")
-CONFIG_ROOT = Path("/var/")
+CONFIG_ROOT = Path("/srv/velican/")
 
 LOCK_TIMEOUT = 60 # seconds
 global_lock = set()
