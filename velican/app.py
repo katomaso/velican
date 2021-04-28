@@ -18,7 +18,7 @@ def handle(command):
 	if not authenticate(request):
 		return "Sign-in needed", 401
 
-	if not _lock(request)
+	if not _lock(request):
 		return "", 202
 
 	try:
@@ -38,7 +38,7 @@ def handle(command):
 
 def regen(output_path, config_path) -> tuple(str, int):
 	# create a file based lock
-	
+
 	lock_path = output_path.with_suffix(".lock")
 	log_path = output_path.with_suffix(".log")
 	def _regen():
@@ -62,7 +62,7 @@ def regen(output_path, config_path) -> tuple(str, int):
 
 
 def status(output_path) -> tuple(str, int):
-	"""status will return 
+	"""status will return
 	- either 200 if regen was completed together with complete log
 	- or 202 (Accepted) with partial log of the regen operation
 	"""
@@ -70,7 +70,7 @@ def status(output_path) -> tuple(str, int):
 	if log_path.exists():
 		return log_path.read_text()
 	return ""
-	
+
 
 def _lock(request) -> bool:
 	"""Get the lock for a long-running operation"""
@@ -85,4 +85,3 @@ def _unlock(request):
 	"""Get the lock for a long-running operation"""
 	lock_key = request.host + request.script_root
 	global_lock.remove(lock_key)
-	
