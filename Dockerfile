@@ -11,6 +11,6 @@ VOLUME /app
 
 EXPOSE 8080
 
-ENV FLASK_APP="velican"
+ENV FLASK_APP="velican.app"
 
 ENTRYPOINT ["/bin/bash"]

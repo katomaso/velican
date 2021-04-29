@@ -9,4 +9,7 @@ OUTPUT_ROOT = Path("/var/velican/")
 CONFIG_ROOT = Path("/srv/velican/")
 
 # pelican_root is the place for all pelican additions
-PELICAN_ROOT = Path("/opt/pelican")
+PELICAN_ROOT = Path("/opt/pelican/")
+
+# Where raw content is stored
+CONTENT_ROOT = Path('/var/dav/')

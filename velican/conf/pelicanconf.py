@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*- #
-from __future__ import unicode_literals
 import os.path
 
 AUTHOR = '{{name}}'
@@ -51,7 +48,7 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 MENUITEMS = [
-   # ("Resume", "author/tomas-peterka.html"),
+   # ("title", "url"),
 ]
 
 # Template variables
@@ -71,8 +68,5 @@ if GITHUB:
 COPYRIGHT = AUTHOR
 DEFAULT_PAGINATION = 30
 LAST_ARTICLE_COUNT = 9
-
-# Uncomment following line if you want document-relative URLs when developing
-RELATIVE_URLS = False
 
 {{extra}}

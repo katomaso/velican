@@ -13,14 +13,14 @@ def add(url: str, **kwargs):
 		domain=domain,
 		path=path,
 		output=f'/var/www/{domain}/{utils.to_dirname(path)}',
-		content=f'/var/webdav/{domain}/{utils.to_dirname(path)}',
+		content=f'/var/dav/{domain}/{utils.to_dirname(path)}',
 		theme="Peli-Kiera", # "twenty-html5up"
 		**kwargs # author, title, subtitle, twitter, linkedin, github, email, address, contact
 	)
 	config_root.mkdir(parents=True, exist_ok=True) # good for update but bad for security...
-	render_config("data/conf/pelicanconf.py", config_root / "pelicanconf.py", ctx)
-	render_config("data/conf/previewconf.py", config_root / "previewconf.py", ctx)
-	render_config("data/conf/publishconf.py", config_root / "publishconf.py", ctx)
+	utils.render_resource("conf/pelicanconf.py", config_root / "pelicanconf.py", ctx)
+	utils.render_resource("conf/previewconf.py", config_root / "previewconf.py", ctx)
+	utils.render_resource("conf/publishconf.py", config_root / "publishconf.py", ctx)
 
 
 def ensure_installed():
@@ -57,7 +57,7 @@ def main():
 
 	command = args.pop(0)
 	if command == "add":
-		opts, arg = getopt.gnu_getopt(args, [], longopts=["author=", "title=", "subtitle="])
+		opts, arg = getopt.gnu_getopt(args, "", longopts=["author=", "title=", "subtitle="])
 		add(arg[0], **{k.strip("-"): v for k, v in opts})
 	elif command == "install":
 		install()
