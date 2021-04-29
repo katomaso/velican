@@ -1,0 +1,5 @@
+pelican
+jinja2
+typogrify
+flask
+markdown

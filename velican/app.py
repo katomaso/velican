@@ -1,15 +1,12 @@
 import subprocess
 
-from flask import request
-from pathlib import Path
-
-# output_root contains logs resp. locks with suffixes .log resp. .lock.
-# lock contains timestamp of the start of the operation and has a timeout
-OUTPUT_ROOT = Path("/var/velican/")
-CONFIG_ROOT = Path("/srv/velican/")
+from . import OUTPUT_ROOT, CONFIG_ROOT
+from flask import Flask, request
 
 LOCK_TIMEOUT = 60 # seconds
 global_lock = set()
+
+app = Flask("velican")
 
 @app.route('/.<command>')
 def handle(command):
@@ -22,7 +19,7 @@ def handle(command):
 		return "", 202
 
 	try:
-		output_path = ROOT_FOLDER / request.host / request.script_root / command
+		output_path = OUTPUT_ROOT / request.host / request.script_root / command
 		config_path = CONFIG_ROOT / request.host / request.script_root / (command + "conf.py")
 		if not config_path.exists():
 			return f"Missing {config_path}", 500
