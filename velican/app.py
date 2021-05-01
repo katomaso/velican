@@ -30,7 +30,7 @@ def handle(path):
 		config_path = CONFIG_ROOT / request.host / path / (command + "conf.py")
 		content_path = CONTENT_ROOT / request.host / utils.to_dirname(path)
 		if not output_path.exists():
-			output_path.parent.mkdir(parents=True)
+			output_path.parent.mkdir(exist_ok=True, parents=True)
 			output_path.touch()
 
 		if not config_path.exists():
