@@ -41,11 +41,11 @@ def install():
 		subprocess.run(["git", "clone", "https://github.com/katomaso/velican-themes.git", str(themes)], check=True)
 
 	service = SYSTEMD_ROOT / "velican.service"
-	if not service.exist():
+	if not service.exists():
 		utils.log_info("Installing systemd service")
 		utils.render_resource("conf/systemd.service", service, {})
-		subprocess.call(["systemctl", "enable", "velican"], check=True)
-		subprocess.call(["systemctl", "start", "velican"], check=True)
+		subprocess.run(["systemctl", "enable", "velican"], check=True)
+		subprocess.run(["systemctl", "start", "velican"], check=True)
 
 	utils.log_info("Installation done")
 
@@ -56,6 +56,7 @@ def main():
     velican add <url> --author=<author> --title=<title> --subtitle=<subtitle>
 	"""
 	args = sys.argv[1:]
+	utils.log_level("info")
 
 	if len(args) == 0:
 		print(main.__doc__)
