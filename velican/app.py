@@ -3,6 +3,7 @@ import threading
 import datetime as dt
 
 from . import OUTPUT_ROOT, CONFIG_ROOT, CONTENT_ROOT
+from . import utils
 from flask import Flask, request
 
 LOCK_TIMEOUT = 60 # seconds
@@ -10,17 +11,16 @@ global_lock = set()
 
 app = Flask("velican")
 
-@app.route('/.<command>', methods=['POST', 'GET'])
-def handle(command):
+@app.route('/<path:path>/.<command>', methods=['POST', 'GET'])
+def handle(path, command):
 	assert command in ("publish", "preview")
-
 	if not _lock(request):
 		return "", 202
 
 	try:
 		output_path = OUTPUT_ROOT / request.host / request.script_root / command
 		config_path = CONFIG_ROOT / request.host / request.script_root / (command + "conf.py")
-		content_path = CONTENT_ROOT / request.host / utils.to_dirname(request.script_root)
+		content_path = CONTENT_ROOT / request.host / utils.to_dirname(path)
 		if not output_path.exists():
 			output_path.parent.mkdir(parents=True)
 			output_path.touch()
@@ -49,7 +49,6 @@ def regen(output_path, config_path, content_path) -> tuple[str, int]:
 		try:
 			lock_path.write_text(now.isoformat())
 			with log_path.open("wt") as log_file:
-				print(f"Calling pelican -s {config_path}")
 				subprocess.call(["pelican", "-s" , str(config_path), str(content_path)], stdout=log_file, stderr=log_file)
 		finally:
 			lock_path.unlink()

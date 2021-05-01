@@ -46,7 +46,7 @@ def install():
 
 def main():
 	"""Usage:
-    velican install
+    velican init
     velican add <url> --author=<author> --title=<title> --subtitle=<subtitle>
 	"""
 	args = sys.argv[1:]
@@ -59,7 +59,7 @@ def main():
 	if command == "add":
 		opts, arg = getopt.gnu_getopt(args, "", longopts=["author=", "title=", "subtitle="])
 		add(arg[0], **{k.strip("-"): v for k, v in opts})
-	elif command == "install":
+	elif command == "init":
 		install()
 	else:
 		print(main.__doc__)
