@@ -28,7 +28,6 @@ def handle(path):
 	try:
 		output_path = OUTPUT_ROOT / request.host / path / command
 		config_path = CONFIG_ROOT / request.host / path / (command + "conf.py")
-		content_path = CONTENT_ROOT / request.host / utils.to_dirname(path)
 		if not output_path.exists():
 			output_path.parent.mkdir(exist_ok=True, parents=True)
 			output_path.touch()
@@ -38,12 +37,12 @@ def handle(path):
 		if request.method == "GET":
 			return status(output_path), 200
 		elif request.method == "POST":
-			return regen(output_path, config_path, content_path), 201
+			return regen(output_path, config_path), 201
 	finally:
 		_unlock(request)
 
 
-def regen(output_path, config_path, content_path) -> tuple[str, int]:
+def regen(output_path, config_path) -> tuple[str, int]:
 	# create a file based lock
 	lock_path = output_path.with_suffix(".lock")
 	log_path = output_path.with_suffix(".log")
@@ -57,7 +56,7 @@ def regen(output_path, config_path, content_path) -> tuple[str, int]:
 		try:
 			lock_path.write_text(now.isoformat())
 			with log_path.open("wt") as log_file:
-				subprocess.call(["pelican", "-s" , str(config_path), str(content_path)], stdout=log_file, stderr=log_file)
+				subprocess.call(["pelican", "-s" , str(config_path)], stdout=log_file, stderr=log_file)
 		finally:
 			lock_path.unlink()
 	# blog generating process does not block the response to the client
