@@ -1,6 +1,6 @@
 # Velican server that regenerates blogs based on host, path and .command
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/flask --port 8081
+ExecStart=/usr/local/bin/flask run --port 8081
 Environment=FLASK_APP=velican.app
 Restart=on-failure
