@@ -11,22 +11,30 @@ global_lock = set()
 
 app = Flask("velican")
 
-@app.route('/<path:path>/.<command>', methods=['POST', 'GET'])
-def handle(path, command):
-	assert command in ("publish", "preview")
+@app.route('/<path:path>', methods=['POST', 'GET'])
+def handle(path):
+	if path.endswith(".publish"):
+		command = "publish"
+		path = path[:-len("/.publish")]
+	elif path.endswith(".preview"):
+		command = "preview"
+		path = path[:-len("/.preview")]
+	else:
+		return "", 404
+
 	if not _lock(request):
 		return "", 202
 
 	try:
-		output_path = OUTPUT_ROOT / request.host / request.script_root / command
-		config_path = CONFIG_ROOT / request.host / request.script_root / (command + "conf.py")
+		output_path = OUTPUT_ROOT / request.host / path / command
+		config_path = CONFIG_ROOT / request.host / path / (command + "conf.py")
 		content_path = CONTENT_ROOT / request.host / utils.to_dirname(path)
 		if not output_path.exists():
 			output_path.parent.mkdir(parents=True)
 			output_path.touch()
 
 		if not config_path.exists():
-			return f"Missing {config_path}", 500
+			return f"Missing {config_path}\r\n", 500
 		if request.method == "GET":
 			return status(output_path), 200
 		elif request.method == "POST":
