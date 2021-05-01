@@ -20,12 +20,12 @@ LOAD_CONTENT_CACHE = True
 DISPLAY_PAGES_ON_MENU = True
 
 TIMEZONE = 'Europe/Paris'
-DEFAULT_LANG = '{{lang}}'
+DEFAULT_LANG = '{{lang|default("cs_CZ")}}'
 LOCALE = 'en_GB.UTF-8'
 
 USE_FOLDER_AS_CATEGORY = True
 # content path
-PATH = '{{content}}'
+PATH = '{{content}}/content'
 STATIC_PATHS = ('static', 'images')
 
 ARTICLE_SAVE_AS = '{category}/{slug}.html'
