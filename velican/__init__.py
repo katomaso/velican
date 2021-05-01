@@ -13,3 +13,6 @@ PELICAN_ROOT = Path("/opt/pelican/")
 
 # Where raw content is stored
 CONTENT_ROOT = Path('/var/dav/')
+
+# Systemd root to install service to
+SYSTEMD_ROOT = Path("/etc/systemd/system/")

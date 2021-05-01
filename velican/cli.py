@@ -1,9 +1,8 @@
 import sys
 import getopt
 import subprocess
-from . import PELICAN_ROOT, CONFIG_ROOT
+from . import PELICAN_ROOT, CONFIG_ROOT, SYSTEMD_ROOT
 from . import utils
-
 
 def add(url: str, **kwargs):
 	ensure_installed()
@@ -40,6 +39,13 @@ def install():
 	if not themes.exists():
 		utils.log_info(f"Installing themes by cloning a git repo into {themes}")
 		subprocess.run(["git", "clone", "https://github.com/katomaso/velican-themes.git", str(themes)], check=True)
+
+	service = SYSTEMD_ROOT / "velican.service"
+	if not service.exist():
+		utils.log_info("Installing systemd service")
+		utils.render_resource("conf/systemd.service", service, {})
+		subprocess.call(["systemctl", "enable", "velican"], check=True)
+		subprocess.call(["systemctl", "start", "velican"], check=True)
 
 	utils.log_info("Installation done")
 
