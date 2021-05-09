@@ -24,10 +24,15 @@ def handle(path):
 
 	if not _lock(request):
 		return "", 202
-
+	
+	output_path = OUTPUT_ROOT / request.host / path / command
+	config_path = CONFIG_ROOT / request.host / path / (command + "conf.py")
+	if not config_path.exists():
+		output_path = (OUTPUT_ROOT / request.host / path).parent / command
+		config_path = (CONFIG_ROOT / request.host / path).parent / (command + "conf.py")
+		if not config_path.exists():
+			return f"Missing {command}conf.py\r\n", 500
 	try:
-		output_path = OUTPUT_ROOT / request.host / path / command
-		config_path = CONFIG_ROOT / request.host / path / (command + "conf.py")
 		if not output_path.exists():
 			output_path.parent.mkdir(exist_ok=True, parents=True)
 			output_path.touch()
