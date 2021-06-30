@@ -11,7 +11,7 @@ global_lock = set()
 
 app = Flask("velican")
 
-@app.route('/<path:path>', methods=['POST', 'GET'])
+@app.route('/<path:path>', methods=['POST', 'PUT', 'DELETE', 'GET'])
 def handle(path):
 	if path.endswith(".publish"):
 		command = "publish"
@@ -41,7 +41,7 @@ def handle(path):
 			return f"Missing {config_path}\r\n", 500
 		if request.method == "GET":
 			return status(output_path), 200
-		elif request.method == "POST":
+		else:
 			return regen(output_path, config_path), 201
 	finally:
 		_unlock(request)
