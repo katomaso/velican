@@ -87,7 +87,7 @@ def install():
 def main():
 	"""Usage:
     velican themes
-    velican new <url> <theme>
+    velican create <url> [--theme] [--username] [--password]
     velican update <url> OPTIONS
     """
 	args = sys.argv[1:]
@@ -100,12 +100,16 @@ def main():
 	ensure_installed()
 
 	command = args.pop(0)
-	if command == "new":
-		username = input("Username: ")
-		password = input("Password: ")
-		create(url=args[0], theme=args[1], password=password, username=username)
+	if command == "create":
+		opts, arg = getopt.gnu_getopt(args, "", longopts=["theme=", "username="])
+		if "--password" not in opts:
+			opts["--password"] = input("Password: ")
+		create(url=arg[0], **{k.strip("-"): v for k, v in opts})
 	elif command == "update":
 		opts, arg = getopt.gnu_getopt(args, "", longopts=["author=", "sitename=", "sitesubtitle=", "twitter=", "linkedin=", "github=", "facebook=", "instagram="])
 		update(arg[0], **{k.strip("-").upper(): v for k, v in opts})
+	elif command == "themes":
+		for theme in (PELICAN_ROOT / "themes").iterdir():
+			print(theme)
 	else:
 		print(main.__doc__)
