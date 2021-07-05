@@ -24,7 +24,7 @@ def handle(path):
 
 	if not _lock(request):
 		return "", 202
-	
+
 	output_path = OUTPUT_ROOT / request.host / path / command
 	config_path = CONFIG_ROOT / request.host / path / (command + "conf.py")
 	if not config_path.exists():

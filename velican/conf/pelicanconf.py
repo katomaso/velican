@@ -1,17 +1,5 @@
 import os.path
-
-AUTHOR = '{{name}}'
-TITLE = '{{title}}'
-SUBTITLE = '{{subtitle}}'
-
-SITEURL = 'https://{{domain}}{{path}}'
-ADDRESS = "Prague, Czechia"
-MAIL = EMAIL = "{{email}}"
-CONTACT = "{{contact}}"
-
-TWITTER = '{{twitter}}'
-LINKEDIN = '{{linkedin}}'
-GITHUB = '{{github}}'
+import configparser
 
 DELETE_OUTPUT_DIRECTORY = True
 CACHE_CONTENT = True
@@ -31,10 +19,10 @@ STATIC_PATHS = ('static', 'images')
 ARTICLE_SAVE_AS = '{category}/{slug}.html'
 ARTICLE_URL = '{category}/{slug}.html'
 
-THEME="/opt/pelican/themes/{{theme}}"
+THEME="{{theme_root}}/{{theme}}"
 
 # plugins are shared for all pelican instances
-PLUGIN_PATHS = ['/opt/pelican/plugins']
+PLUGIN_PATHS = ['{{plugin_root}}']
 PLUGINS = ['readtime', 'neighbors']
 
 # Feed generation is usually not desired when developing
@@ -47,26 +35,32 @@ TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
+DEFAULT_PAGINATION = 30
+LAST_ARTICLE_COUNT = 9
+
 MENUITEMS = [
    # ("title", "url"),
 ]
 
 # Template variables
-NAME = AUTHOR
-TAGLINE = SITESUBTITLE = SUBTITLE
-SITENAME = TITLE
+this_dir = os.path.dirname(os.path.realpath(__file__))
+config = configparser.ConfigParser()
+config.read(this_dir + "/config.ini")
+locals().update(**config['context'])
+
+if 'SUBTITLE' in locals():
+	SITESUBTITLE = SUBTITLE
+
+if 'TITLE' in locals():
+	SITENAME = TITLE
 
 SOCIAL = []
 
-if TWITTER:
-    social.append(('twitter', 'https://twitter.com/{{TWITTER}}'))
-if LINKEDIN:
-    social.append(('linkedin', 'https://linkedin.com/in/{{LINKEDIN}}'))
-if GITHUB:
-    social.append(('github', 'https://github.com/{{GITHUB}}'))
+if 'TWITTER' in locals():
+    SOCIAL.append(('twitter', 'https://twitter.com/{{TWITTER}}'))
+if 'LINKEDIN' in locals():
+    SOCIAL.append(('linkedin', 'https://linkedin.com/in/{{LINKEDIN}}'))
+if 'GITHUB' in locals():
+    SOCIAL.append(('github', 'https://github.com/{{GITHUB}}'))
 
 COPYRIGHT = AUTHOR
-DEFAULT_PAGINATION = 30
-LAST_ARTICLE_COUNT = 9
-
-{{extra}}
