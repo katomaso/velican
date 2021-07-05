@@ -110,8 +110,9 @@ def main():
 		opts, arg = getopt.gnu_getopt(args, "", longopts=["author=", "sitename=", "sitesubtitle=", "twitter=", "linkedin=", "github=", "facebook=", "instagram="])
 		update(arg[0], **{k.strip("-").upper(): v for k, v in opts})
 	elif command == "themes":
-		for theme in (PELICAN_ROOT / "themes").iterdir() if not theme.name.startswith("."):
-			print(theme.name)
+		for theme in (PELICAN_ROOT / "themes").iterdir():
+			if not theme.name.startswith("."):
+				print(theme.name)
 	elif command == "upgrade":
 		install()
 	else:
