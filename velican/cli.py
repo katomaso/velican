@@ -72,7 +72,7 @@ def install():
 		subprocess.run(["git", "clone", "--recurse-submodules", "https://github.com/katomaso/velican-themes.git", str(themes)], check=True)
 	else:
 		utils.log_info(f"Updating themes in {themes}")
-		subprocess.run(["git", "pull", "--recurse-submodules"] cwd=str(themes), check=True)
+		subprocess.run(["git", "pull", "--recurse-submodules"], cwd=str(themes), check=True)
 
 	service = SYSTEMD_ROOT / "velican.service"
 	if not service.exists():
