@@ -103,9 +103,8 @@ def main():
 	command = args.pop(0)
 	if command == "create":
 		opts, arg = getopt.gnu_getopt(args, "", longopts=["theme=", "username="])
-		if "--password" not in opts:
-			opts["--password"] = input("Password: ")
-		create(url=arg[0], **{k.strip("-"): v for k, v in opts})
+		password = input("Password: ")
+		create(url=arg[0], password=password, **{k.strip("-"): v for k, v in opts})
 	elif command == "update":
 		opts, arg = getopt.gnu_getopt(args, "", longopts=["author=", "sitename=", "sitesubtitle=", "twitter=", "linkedin=", "github=", "facebook=", "instagram="])
 		update(arg[0], **{k.strip("-").upper(): v for k, v in opts})
