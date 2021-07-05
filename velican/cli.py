@@ -18,7 +18,7 @@ def create(url: str, theme: str, password: str, username="admin", **kwargs):
 		ctx_file.read(ctx_file_path)
 	if not password:
 		password = "".join(random.sample(string.ascii_letters + string.digits, 8))
-	ngm2.add_auth(username, password, url)
+	ngm2.add_auth(url, username, password)
 	ctx = dict(
 		url=url,
 		domain=domain,
