@@ -2,5 +2,5 @@
 [Service]
 Type=simple
 ExecStart=/usr/local/bin/flask run --port {{port}}
-Environment=FLASK_APP=velican.app
+Environment=FLASK_APP=velican.server
 Restart=on-failure

@@ -89,6 +89,7 @@ def main():
     velican themes
     velican create <url> [--theme] [--username] [--password]
     velican update <url> OPTIONS
+    valican upgrade
     """
 	args = sys.argv[1:]
 	utils.log_level("info")
@@ -111,5 +112,7 @@ def main():
 	elif command == "themes":
 		for theme in (PELICAN_ROOT / "themes").iterdir():
 			print(theme)
+	elif command == "upgrade":
+		install()
 	else:
 		print(main.__doc__)
