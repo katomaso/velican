@@ -52,7 +52,7 @@ def update(url: str, ctx: dict):
 	else:
 		ctx_file['context'].update(**ctx)
 	with open(config_root / 'config.ini', 'w') as ini_file:
-		config.write(ini_file)
+		ctx_file.write(ini_file)
 
 def ensure_installed():
 	if PELICAN_ROOT.exists():
