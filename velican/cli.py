@@ -47,7 +47,10 @@ def update(url: str, ctx: dict):
 	config_root = CONFIG_ROOT / url
 	ctx_file = configparser.ConfigParser()
 	ctx_file.read(config_root / 'config.ini')
-	ctx_file['context'].update(**ctx)
+	if 'context' not in ctx_file:
+		ctx_file['context'] = ctx
+	else:
+		ctx_file['context'].update(**ctx)
 	with open(config_root / 'config.ini', 'w') as ini_file:
 		config.write(ini_file)
 
