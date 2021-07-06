@@ -107,7 +107,7 @@ def main():
 		create(url=arg[0], password=password, **{k.strip("-"): v for k, v in opts})
 	elif command == "update":
 		opts, arg = getopt.gnu_getopt(args, "", longopts=["author=", "sitename=", "sitesubtitle=", "twitter=", "linkedin=", "github=", "facebook=", "instagram="])
-		update(arg[0], **{k.strip("-").upper(): v for k, v in opts})
+		update(arg[0], {k.strip("-").upper(): v for k, v in opts})
 	elif command == "themes":
 		for theme in (PELICAN_ROOT / "themes").iterdir():
 			if not theme.name.startswith("."):
