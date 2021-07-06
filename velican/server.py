@@ -2,7 +2,7 @@ import subprocess
 import threading
 import datetime as dt
 
-from . import OUTPUT_ROOT, CONFIG_ROOT, CONTENT_ROOT
+from . import OUTPUT_ROOT, CONFIG_ROOT
 from . import utils
 from flask import Flask, request
 
