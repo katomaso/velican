@@ -44,11 +44,12 @@ def create(url: str, theme: str, password: str, username="admin", **kwargs):
 
 def update(url: str, ctx: dict):
 	"""Update blog's context configuration"""
+	config_root = CONFIG_ROOT / url
 	ctx_file = configparser.ConfigParser()
 	ctx_file.read(config_root / 'config.ini')
 	ctx_file['context'].update(**ctx)
-	with open(config_root / 'config.ini', 'w') as configfile:
-		config.write(configfile)
+	with open(config_root / 'config.ini', 'w') as ini_file:
+		config.write(ini_file)
 
 def ensure_installed():
 	if PELICAN_ROOT.exists():
