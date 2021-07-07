@@ -87,6 +87,9 @@ def install():
 
 	utils.log_info("Installation done")
 
+def list_blogs():
+	for file in CONFIG_ROOT.iterdir():
+		print(file.name)
 
 def main():
 	"""Usage:
@@ -118,5 +121,7 @@ def main():
 				print(theme.name)
 	elif command == "upgrade":
 		install()
+	elif command == "blogs":
+		list_blogs()
 	else:
 		print(main.__doc__)
