@@ -14,8 +14,6 @@ def create(url: str, theme: str, password: str, username="admin", **kwargs):
 	config_root.mkdir(parents=True, exist_ok=True) # good for update but bad for security
 	ctx_file_path = config_root / 'config.ini'
 	ctx_file = configparser.ConfigParser()
-	if ctx_file_path.exists():
-		ctx_file.read(ctx_file_path)
 	if not password:
 		password = "".join(random.sample(string.ascii_letters + string.digits, 8))
 	ngm2.add_auth(url, username, password)
@@ -44,15 +42,17 @@ def create(url: str, theme: str, password: str, username="admin", **kwargs):
 
 def update(url: str, ctx: dict):
 	"""Update blog's context configuration"""
-	config_root = CONFIG_ROOT / url
+	config_path = CONFIG_ROOT / url / 'config.ini'
 	ctx_file = configparser.ConfigParser()
-	ctx_file.read(config_root / 'config.ini')
+	files_read = ctx_file.read()
+	if len(files_read) == 0:
+		raise IOError("Could not load configuration ")
 	if 'context' not in ctx_file:
 		ctx_file['context'] = ctx
 	else:
 		ctx_file['context'].update(**ctx)
-	with open(config_root / 'config.ini', 'w') as ini_file:
-		ctx_file.write(ini_file)
+	with config_path.open('wt') as config_file:
+		ctx_file.write(config_file)
 
 def ensure_installed():
 	if PELICAN_ROOT.exists():

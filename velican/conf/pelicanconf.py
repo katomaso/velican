@@ -9,11 +9,11 @@ DISPLAY_PAGES_ON_MENU = True
 
 TIMEZONE = 'Europe/Paris'
 DEFAULT_LANG = '{{lang|default("cs_CZ")}}'
-LOCALE = 'en_GB.UTF-8'
+LOCALE = 'en_US.UTF-8'
 
 USE_FOLDER_AS_CATEGORY = True
 # content path
-PATH = '{{content}}/content'
+PATH = '{{content}}'
 STATIC_PATHS = ('static', 'images')
 
 ARTICLE_SAVE_AS = '{category}/{slug}.html'
@@ -22,8 +22,8 @@ ARTICLE_URL = '{category}/{slug}.html'
 THEME="{{theme_root}}/{{theme}}"
 
 # plugins are shared for all pelican instances
-PLUGIN_PATHS = ['{{plugin_root}}']
-PLUGINS = ['readtime', 'neighbors']
+PLUGIN_PATHS = ['{{plugin_root}}', '{{plugin_root}}/neighbors/pelican/plugins']
+PLUGINS = ['neighbors', 'pelican-readtime']
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = 'feeds/atom.xml'
@@ -46,7 +46,8 @@ MENUITEMS = [
 this_dir = os.path.dirname(os.path.realpath(__file__))
 config = configparser.ConfigParser()
 config.read(this_dir + "/config.ini")
-locals().update(**config['context'])
+for key, value in config.items('context'):
+	locals()[key.upper()] = value
 
 if 'SUBTITLE' in locals():
 	SITESUBTITLE = SUBTITLE
