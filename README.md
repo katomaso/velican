@@ -11,7 +11,7 @@ displayed to user. This makes it extremely fast on client side and lightweight o
 ## Fully web based
 
 The downside of statically generated sites is that you need to write the posts somewhere and then transfer
-them to your server. Velican solves this paint-point by using WebDAV protocol for writing files to the server.
+them to your server. Velican solves this pain-point by using WebDAV protocol for writing files to the server.
 WebDAV is amazing standardized protocol that is implemented by all mainline webservers. It works pretty much
 like Dropbox or Google Drive. Part of Velican installation is web based markdown editor with webdav navigator
 so you can edit your posts comfortably online - still without any backend.

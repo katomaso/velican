@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label>domain</label>
+    <input name="domain" type="text" value="{{domain}}" placeholder="example.com">
+    
+    <label>theme</label>
+    <select name="theme" type="text">
+        {% for option in theme.options %}
+        <option value="{{option.value}}"{% if option.selected%} selected{%endif%}>{{option.label}}</option>
+        {% endfor %}
+    </select>
+    
+    <label>lang</label>
+    <input name="lang" type="text" value="{{lang}}">
+    
+    <label>timezone</label>
+    <input name="timezone" type="text" value="{{timezone}}">
+    
+    <label>title</label>
+    <input name="title" type="text" value="{{title}}">
+    
+    <label>subtitle</label>
+    <input name="subtitle" type="text" value="{{subtitle}}">
+    
+    <label>twitter</label>
+    <input name="twitter" type="text" value="{{twitter}}">
+    
+    <label>linkedin</label>
+    <input name="linkedin" type="text" value="{{linkedin}}">
+    
+    <label>github</label>
+    <input name="github" type="text" value="{{github}}">        
+</body>
+</html>

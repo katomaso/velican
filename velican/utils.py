@@ -7,7 +7,7 @@ from typing import Union, List
 
 logger = logging.getLogger("velican")
 
-def render_resource(resource: str, target: Union[str,pathlib.Path], context: dict):
+def render(resource: str, target: Union[str,pathlib.Path], context: dict):
 	template = pkg_resources.resource_string("velican", resource).decode('utf-8')
 	content = jinja2.Template(template).render(context)
 	with open(str(target), "wt") as target_file:

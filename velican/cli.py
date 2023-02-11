@@ -12,7 +12,6 @@ def create(url: str, theme: str, password: str, username="admin", **kwargs):
 	domain, path = utils.split_url(url)
 	config_root = CONFIG_ROOT / url
 	config_root.mkdir(parents=True, exist_ok=True) # good for update but bad for security
-	ctx_file_path = config_root / 'config.ini'
 	ctx_file = configparser.ConfigParser()
 	if not password:
 		password = "".join(random.sample(string.ascii_letters + string.digits, 8))

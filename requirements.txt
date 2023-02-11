@@ -1,5 +1,9 @@
-pelican
+wheel
 jinja2
-typogrify
 flask
 markdown
+typogrify
+pelican
+pelican-neighbors
+flask_admin
+flask_sqlalchemy

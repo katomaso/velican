@@ -7,9 +7,9 @@ LOAD_CONTENT_CACHE = True
 
 DISPLAY_PAGES_ON_MENU = True
 
-TIMEZONE = 'Europe/Paris'
+TIMEZONE = '{{tz|default("Europe/Paris")}}'
 DEFAULT_LANG = '{{lang|default("cs_CZ")}}'
-LOCALE = 'en_US.UTF-8'
+LOCALE = '{{lang|default("cs_CZ")}}.UTF-8'
 
 USE_FOLDER_AS_CATEGORY = True
 # content path
@@ -22,7 +22,6 @@ ARTICLE_URL = '{category}/{slug}.html'
 THEME="{{theme_root}}/{{theme}}"
 
 # plugins are shared for all pelican instances
-PLUGIN_PATHS = ['{{plugin_root}}', '{{plugin_root}}/neighbors/pelican/plugins']
 PLUGINS = ['neighbors', 'pelican-readtime']
 
 # Feed generation is usually not desired when developing
@@ -42,13 +41,6 @@ MENUITEMS = [
    # ("title", "url"),
 ]
 
-# Template variables
-this_dir = os.path.dirname(os.path.realpath(__file__))
-config = configparser.ConfigParser()
-config.read(this_dir + "/config.ini")
-for key, value in config.items('context'):
-	locals()[key.upper()] = value
-
 if 'SUBTITLE' in locals():
 	SITESUBTITLE = SUBTITLE
 
@@ -57,11 +49,17 @@ if 'TITLE' in locals():
 
 SOCIAL = []
 
-if 'TWITTER' in locals():
-    SOCIAL.append(('twitter', 'https://twitter.com/{{TWITTER}}'))
-if 'LINKEDIN' in locals():
-    SOCIAL.append(('linkedin', 'https://linkedin.com/in/{{LINKEDIN}}'))
-if 'GITHUB' in locals():
-    SOCIAL.append(('github', 'https://github.com/{{GITHUB}}'))
+{% if twitter %}
+SOCIAL.append(('twitter', 'https://twitter.com/' + '{{twitter}}'.strip("@")))
+{% endif %}
+{% if linkedin %}
+SOCIAL.append(('linkedin', 'https://linkedin.com/in/' + '{{linkedin}}'.strip("@")))
+{% endif %}
+{% if github %}
+SOCIAL.append(('github', 'https://github.com/' + '{{github}}'.strip("@")))
+{% endif %}
+{% if instagram %}
+SOCIAL.append(('instagram', 'https://instagram.com/'+ '{{instagram}}'.strip("@")))
+{% endif %}
 
 COPYRIGHT = AUTHOR
