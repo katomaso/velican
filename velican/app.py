@@ -1,18 +1,20 @@
-from flask import url_for, redirect, render_template, request, abort
+from flask import Flask
+import flask_sqlalchemy as flask_sql
+import flask_social
+from flask.signals import Namespace
 
-import flask_admin
-import flask_admin.contrib.sqla as flask_sql
+from . import settings
 
-from velican import app, db
-from velican.models import blog
+app = Flask(__name__)
+# app.config.from_pyfile('config.cfg')
+app.config.from_object(settings)
 
-admin = flask_admin.Admin(app, 'Velikán',
-    # base_template='my_master.html',
-    template_mode='bootstrap4',
-)
-admin.add_view(flask_sql.ModelView(blog.Blog, db.session))
+db = flask_sql.SQLAlchemy(app)
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+social = flask_social.core.Social(app=app, datastore=db)
+
+signals = Namespace("velikan")
+
+saved = signals.signal('saved')
+previewed = signals.signal('previewed')
+published = signals.signal('published')

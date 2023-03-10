@@ -40,7 +40,7 @@ def create(url: str, theme: str, password: str, username="admin", **kwargs):
 	return password
 
 def update(url: str, ctx: dict):
-	"""Update blog's context configuration"""
+	"""Update site's context configuration"""
 	config_path = CONFIG_ROOT / url / 'config.ini'
 	ctx_file = configparser.ConfigParser()
 	files_read = ctx_file.read()
