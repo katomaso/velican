@@ -1,6 +1,8 @@
-from .app import app, db
-from . import views as _
-from . import models as _
+from velican.app import app, db
+
+from velican import admin as _
+from velican import views as _
+from velican import models as _
 
 application = app
 

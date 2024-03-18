@@ -5,7 +5,7 @@ from velican import models
 
 from pathlib import Path
 
-def _generate_blog(site: models.Site, live: bool, user: str):
+def _generate_blog(site: models.Site, live: bool):
     publish = models.Publish.current(preview=not live)
     if publish is not None:
         return "Publishing in progress"

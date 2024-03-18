@@ -9,7 +9,8 @@ def register_domain_to_caddy(instance: Site):
     requests.post("caddy-admin:9900", {"route": ...})
 
 def init():
-    event.listen(Site, "before_insert", register_domain_to_caddy, propagate=True)
+    pass
+    #event.listen(Site, "before_insert", register_domain_to_caddy, propagate=True)
 
 def config():
     return None

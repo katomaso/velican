@@ -4,7 +4,7 @@ from flask import request, render_template, login_required
 from flask_login import current_user, login_user
 from flask_dance.contrib.facebook import make_facebook_blueprint
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
-from .app import app, db, social, published
+from .app import app, db, published
 from .models import OAuth
 from . import controllers
 
@@ -25,9 +25,7 @@ facebook_blueprint = make_facebook_blueprint(
 def profile():
     return render_template(
         'profile.html',
-        content='Profile Page',
-        twitter_conn=social.twitter.get_connection(),
-        facebook_conn=social.facebook.get_connection())
+        content='Profile Page')
 
 @app.route('/site/<site:path>/publish/', methods=['POST'])
 def publish(site: str, user="admin"):
@@ -43,7 +41,7 @@ def publish(site: str, user="admin"):
     db.session.add(publish)
     db.session.commit()
 
-@app.route('/site/<site:path>/preview/', methods=['GET'])
+@app.route('/site/<site:path>/preview/', methods=['POST'])
 def preview(site: str, user="admin"):
     """Get the publishing progress"""
     pass
